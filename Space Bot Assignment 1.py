@@ -142,33 +142,39 @@ json_data = r.json()
     
 # 10. Provide the URL to the Reverse GeoCode API.
     # Get location information using the API reverse geocode service using the HTTP GET method
-       r = requests.get(maps_url, params=maps_params)
-if r.status_code != 200:
-    raise Exception("Error retrieving location data.")
-json_data = r.json()
+       r = requests.get("https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={My Api}", 
+                             params = mapsAPIGetParameters
+                        )
+
+    # Verify if the returned JSON data from the API service are OK
+        json_data = r.json()
+
+        if r.status_code != 200:
+            continue
 
 
 # 11. Store the location received from the API in a required variables
-        CountryResult = json_data["<!!!REPLACEME!!!> with path to adminArea1 key!!!>"]
-        <!!!REPLACEME with code to save state, city, street etc>
-        
-        #Find the country name using ISO3611 country code
-        if not CountryResult == "XZ":
-            CountryResult = countries.get(CountryResult).name
+       CountryResult = json_data["address"].get("country_code", "XZ").upper()
+        StateResult = json_data["address"].get("state", "")
+        CityResult = json_data["address"].get("city", json_data["address"].get("town", json_data["address"].get("village", "")))
+        StreetResult = json_data["address"].get("road", "")
 
+        #Find the country name using ISO3166 country code
+        if not CountryResult == "XZ":
+            try:
+                CountryResult = countries.get(CountryResult).name
+            except:
+                CountryResult = "Not Found Country"
 # 12. Complete the code to format the response message.
 #     Example responseMessage result: In Austin, Texas the ISS will fly over on Thu Jun 18 18:42:36 2020 for 242 seconds.
         #responseMessage = "On {}, the ISS was flying over the following location: \n{} \n{}, {} \n{}\n({}\", {}\")".format(timeString, StreetResult, CityResult, StateResult, CountryResult, lat, lng)
 
-        if CountryResult == "XZ":
-            responseMessage = "On {}, the ISS was flying over a body of water at latitude {}° and longitude {}°.".format(timeString, lat, lng)
-        
-<!!!REPLACEME with if statements to compose the message to display the current ISS location in the Webex Team room!!!>
-        elif
-        else
-       
-        # print the response message
-        print("Sending to Webex: " +responseMessage)
+       if CountryResult == "XZ":
+    responseMessage = f"On {timeString}, the ISS was flying over a body of water at latitude {lat}° and longitude {lng}°."
+else:
+    responseMessage = f"On {timeString}, the ISS was flying over {CityResult}, {StateResult}, {CountryResult}. ({lat}°, {lng}°)"
+print("Sending to Webex:", responseMessage)
+)
 
 # 13. Complete the code to post the message to the Webex room.         
         # the Webex HTTP headers, including the Authoriztion and Content-Type
@@ -188,6 +194,7 @@ json_data = r.json()
                          )
         <!!!REPLACEME with code for error handling in case request not successfull>
                 
+
 
 
 
