@@ -38,7 +38,7 @@ if choice.lower() == "n":
     user_token = input("Please enter your Webex access token: ")
     accessToken = f"Bearer {user_token}"
 else:
-    accessToken = "Bearer Y2MxMzU5MTAtYmVlMS00MmIyLWE0ZTItNDE1ZTExYTlmOGY4Njg4ZTgwM2MtOWIw_PE93_d68b3fe9-4c07-4dad-8882-3b3fd6afb92d"
+    accessToken = "Bearer "  # Webex access token removed
 
 # 3. Provide the URL to the Webex room API.
                 
@@ -139,11 +139,10 @@ while True:
     mapsAPIGetParameters = { 
         "lat": lat,
         "lon": lng,
-        "appid": "23b3179ed699a6446e1c10664a3ef5da"
+        "appid": ""  # OpenWeatherMap API key removed
     }
     
     # 10. Provide the URL to the Reverse GeoCode API.
-    # Fix the OpenWeatherMap API URL - remove the placeholder variables
     r = requests.get("https://api.openweathermap.org/data/2.5/weather", 
                      params=mapsAPIGetParameters
                     )
