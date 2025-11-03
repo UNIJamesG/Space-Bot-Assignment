@@ -178,22 +178,25 @@ print("Sending to Webex:", responseMessage)
 
 # 13. Complete the code to post the message to the Webex room.         
         # the Webex HTTP headers, including the Authoriztion and Content-Type
-        HTTPHeaders = { 
-                             "Authorization": <!!!REPLACEME!!!>,
-                             "Content-Type": "application/json"
-                           }
-        
-        PostData = {
-                            "roomId": <!!!REPLACEME!!!>,
-                            "text": <!!!REPLACEME!!!>
-                        }
-        # Post the call to the Webex message API.
-        r = requests.post( "<!!!REPLACEME with URL!!!>", 
-                              data = json.dumps(<!!!REPLACEME!!!>), 
-                              headers = <!!!REPLACEME!!!>
-                         )
-        <!!!REPLACEME with code for error handling in case request not successfull>
+        HTTPHeaders = {
+    "Authorization": accessToken,
+    "Content-Type": "application/json"
+}
+
+PostData = {
+    "roomId": roomIdToGetMessages,
+    "text": responseMessage
+}
+
+r = requests.post("https://webexapis.com/v1/messages",
+                  data=json.dumps(PostData),
+                  headers=HTTPHeaders)
+
+if r.status_code != 200:
+    print("Error posting message:", r.text)
+
                 
+
 
 
 
