@@ -11,13 +11,16 @@ This investigation sheet helps you gather key technical information from the thr
 
 | Criteria | Details |
 |---------|---------|
-| API Base URL | `_______________________________` |
-| Authentication Method | `_______________________________` |
-| Endpoint to list rooms | `_______________________________` |
-| Endpoint to get messages | `_______________________________` |
-| Endpoint to send message | `_______________________________` |
-| Required headers | `_______________________________` |
-| Sample full GET or POST request | `_______________________________` |
+| API Base URL | `https://webexapis.com/v1` |
+| Authentication Method | `Bearer Token` |
+| Endpoint to list rooms | `/rooms` |
+| Endpoint to get messages | `/messages` |
+| Endpoint to send message | `/messages` |
+| Required headers | `{"Authorization": "Bearer {token}", "Content-Type": "application/json"}` |
+| Sample full GET or POST request | `GET https://webexapis.com/v1/rooms
+POST https://webexapis.com/v1/messages
+Headers: {"Authorization": "Bearer Y2MxMzU5MTAtYmVlMS00MmIyLWE0ZTItNDE1ZTExYTlmOGY4Njg4ZTgwM2MtOWIw_PE93_d68b3fe9-4c07-4dad-8882-3b3fd6afb92d", "Content-Type": "application/json"}
+Body: {"roomId": "room_id", "text": "Hello"}` |
 
 ---
 
@@ -25,11 +28,18 @@ This investigation sheet helps you gather key technical information from the thr
 
 | Criteria | Details |
 |---------|---------|
-| API Base URL | `_______________________________` |
-| Endpoint for current ISS location | `_______________________________` |
+| API Base URL | `http://api.open-notify.org` |
+| Endpoint for current ISS location | `/iss-now.json` |
 | Sample response format (example JSON) |  
 ```
-
+{
+  "message": "success",
+  "timestamp": 1645826400,
+  "iss_position": {
+    "latitude": "51.6587",
+    "longitude": "-0.2859"
+  }
+}
 ```
 |
 
@@ -39,15 +49,28 @@ This investigation sheet helps you gather key technical information from the thr
 
 | Criteria | Details |
 |---------|---------|
-| Provider used (circle one) | **LocationIQ / Mapbox/ other -provide detail** |
-| API Base URL | `_______________________________` |
-| Endpoint for reverse geocoding | `_______________________________` |
-| Authentication method | `_______________________________` |
-| Required query parameters | `_______________________________` |
-| Sample request with latitude/longitude | `_______________________________` |
+| Provider used (circle one) | **OpenWeatherMapAPI** |
+| API Base URL | `https://api.openweathermap.org/data/2.5` |
+| Endpoint for reverse geocoding | `/weather` |
+| Authentication method | `API Key (appid parameter)` |
+| Required query parameters | `lat, lon, appid` |
+| Sample request with latitude/longitude | `https://api.openweathermap.org/data/2.5/weather?lat=51.5074&lon=-0.1278&appid=23b3179ed699a6446e1c10664a3ef5da` |
 | Sample JSON response (formatted example) |  
 ```
-
+{
+  "coord": {"lon": -0.13, "lat": 51.51},
+  "weather": [{"id": 300, "main": "Drizzle", "description": "light intensity drizzle", "icon": "09d"}],
+  "base": "stations",
+  "main": {"temp": 280.32, "pressure": 1012, "humidity": 81, "temp_min": 279.15, "temp_max": 281.15},
+  "visibility": 10000,
+  "wind": {"speed": 4.1, "deg": 80},
+  "clouds": {"all": 90},
+  "dt": 1485789600,
+  "sys": {"type": 1, "id": 5091, "message": 0.0103, "country": "GB", "sunrise": 1485762037, "sunset": 1485794875},
+  "id": 2643743,
+  "name": "London",
+  "cod": 200
+}
 ```
 |
 
@@ -57,43 +80,50 @@ This investigation sheet helps you gather key technical information from the thr
 
 | Criteria | Details |
 |---------|---------|
-| Library used | `_______________________________` |
-| Function used to convert epoch | `_______________________________` |
+| Library used | `time` |
+| Function used to convert epoch | `time.ctime()` |
 | Sample code to convert timestamp |  
-```  
+```
+import time
+timestamp = 1645826400
+timeString = time.ctime(timestamp)
+print(timeString)
 ```
 |
-| Output (human-readable time) | `_______________________________` |
+| Output (human-readable time) | `Mon Feb 28 11:00:00 2022` |
 
 ---
 
 ## 🧩 Section 5: Web Architecture & MVC Design Pattern (12 marks)
 
 ### 🌐 Web Architecture – Client-Server Model
-
-- **Client**: 
-- **Server**: 
-- (Explain the communication between them & include a block diagram )
+Client (User) → HTTP Request → Server (API) → HTTP Response → Client (User)
+    ↓                                      ↓
+Webex App                           Webex API Server
+    ↓                                      ↓
+Python Script                      ISS Location API
+    ↓                                      ↓
+                   Geocoding API
 
 ### 🔁 RESTful API Usage
 
-- 
-- 
-- 
+- HTTTP Method (Get,POST)
+- Returns data in the JSON format
+- Communicates between the client and the server
 
 ### 🧠 MVC Pattern in Space Bot
 
 | Component   | Description |
 |------------|-------------|
-| **Model**  |  |
-| **View**   |  |
-| **Controller** |  |
+| **Model**  |ISS Location data, Geocoding Data and information about the room  |
+| **View**   |Formatted messages sent to Webex rooms  |
+| **Controller** | Coordinates between API's, Processes Commands and Manages Flow of Outputs |
 
 
 #### Example:
-- Model: 
-- View: 
-- Controller: 
+- Model: json_data["iss_position"], json_data_weather["name"]
+- View: responseMessage
+- Controller: /seconds
 
 ---
 
