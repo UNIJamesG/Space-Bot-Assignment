@@ -29,14 +29,18 @@
  
 # 1. Import libraries for API requests, JSON formatting, epoch time conversion, and iso3166.
 
-<!!!REPLACEME with code for libraries>
+import requests, json, time
+from iso3166 import countries
 
 # 2. Complete the if statement to ask the user for the Webex access token.
 choice = input("Do you wish to use the hard-coded Webex token? (y/n) ")
 
-<!!!REPLACEME with if statements to ask user for the Webex Access Token!!!>
+choice = input("Do you wish to use the hard-coded Webex token? (y/n) ")
+if choice.lower() == "n":
+    user_token = input("Please enter your Webex access token: ")
+    accessToken = f"Bearer {user_token}"
 else:
-    accessToken = "Bearer <!!!REPLACEME with hard-coded token!!!>"
+    accessToken = "Bearer<!!!REPLACEME with hard-coded token!!!>"
 
 # 3. Provide the URL to the Webex room API.
 r = requests.get(   "<!!!REPLACEME with URL!!!>",
@@ -195,3 +199,4 @@ while True:
                          )
         <!!!REPLACEME with code for error handling in case request not successfull>
                 
+
