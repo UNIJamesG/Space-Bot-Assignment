@@ -43,9 +43,11 @@ else:
     accessToken = "Bearer<!!!REPLACEME with hard-coded token!!!>"
 
 # 3. Provide the URL to the Webex room API.
-r = requests.get(   "<!!!REPLACEME with URL!!!>",
-                    headers = {"Authorization": accessToken}
                 )
+r = requests.get(
+    "https://webexapis.com/v1/rooms",
+    headers={"Authorization": accessToken}
+)
 
 #######################################################################################
 # DO NOT EDIT ANY BLOCKS WITH r.status_code
@@ -199,4 +201,5 @@ while True:
                          )
         <!!!REPLACEME with code for error handling in case request not successfull>
                 
+
 
