@@ -137,19 +137,16 @@ json_data = r.json()
 # 9. Provide your Geoloaction API consumer key.
     
         mapsAPIGetParameters = { 
-                                <!!!REPLACEME with all the required paramenters by the api>
+                                "appid":"Your Key"
                                }
     
 # 10. Provide the URL to the Reverse GeoCode API.
     # Get location information using the API reverse geocode service using the HTTP GET method
-        r = requests.get("<!!!REPLACEME with URL!!!>", 
-                             params = mapsAPIGetParameters
-                        )
+       r = requests.get(maps_url, params=maps_params)
+if r.status_code != 200:
+    raise Exception("Error retrieving location data.")
+json_data = r.json()
 
-    # Verify if the returned JSON data from the API service are OK
-        json_data = <!!!REPLACEME with code>
-        
-        <!!!REPLACEME with code for error handling in case no response>
 
 # 11. Store the location received from the API in a required variables
         CountryResult = json_data["<!!!REPLACEME!!!> with path to adminArea1 key!!!>"]
@@ -191,6 +188,7 @@ json_data = r.json()
                          )
         <!!!REPLACEME with code for error handling in case request not successfull>
                 
+
 
 
 
