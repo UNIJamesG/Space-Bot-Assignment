@@ -40,7 +40,7 @@ if choice.lower() == "n":
     user_token = input("Please enter your Webex access token: ")
     accessToken = f"Bearer {user_token}"
 else:
-    accessToken = "Bearer Y2MxMzU5MTAtYmVlMS00MmIyLWE0ZTItNDE1ZTExYTlmOGY4Njg4ZTgwM2MtOWIw_PE93_d68b3fe9-4c07-4dad-8882-3b3fd6afb92d"
+    accessToken = "Bearer MY API"
 
 # 3. Provide the URL to the Webex room API.
                 
@@ -108,6 +108,12 @@ while True:
         raise Exception(f"Incorrect reply: {r.status_code} {r.text}")
     
     #for the sake of testing, the max number of seconds is set to 5.
+    message=r.text
+    if message.find("/") == 0:
+        if (message[1:].isdigit()):
+            seconds = int(message[1:])
+    else:
+        seconds = 1
     if seconds > 5:
             seconds = 5    
             
@@ -132,7 +138,7 @@ while True:
     # 9. Provide your Geoloaction API consumer key.
     
     mapsAPIGetParameters = { 
-                            "appid":"23b3179ed699a6446e1c10664a3ef5da"
+                            "appid":"My API"
                                }
     
     # 10. Provide the URL to the Reverse GeoCode API.
@@ -150,17 +156,14 @@ while True:
 
 
     # 11. Store the location received from the API in a required variables
-    CountryResult = json_data["address"].get("country_code", "XZ").upper()
-    StateResult = json_data["address"].get("state", "")
-    CityResult = json_data["address"].get("city", json_data["address"].get("town", json_data["address"].get("village", "")))
-    StreetResult = json_data["address"].get("road", "")
+        # 11. Store the location received from the API in required variables
+    CountryResult = json_data.get("sys", {}).get("country", "XZ").upper()
+    StateResult = json_data.get("name", "")
+    CityResult = json_data.get("name", "")
 
-            #Find the country name using ISO3166 country code
-    if not CountryResult == "XZ":
-            try:
-                CountryResult = countries.get(CountryResult).name
-            except:
-                CountryResult = "Not Found Country"
+    # For OpenWeatherMap, we get city name but not detailed address components
+    # If you want more detailed location info, consider using a different reverse geocoding service
+    StreetResult = "Not available"  # OpenWeatherMap doesn't provide street-level data
     # 12. Complete the code to format the response message.
     #     Example responseMessage result: In Austin, Texas the ISS will fly over on Thu Jun 18 18:42:36 2020 for 242 seconds.
         #responseMessage = "On {}, the ISS was flying over the following location: \n{} \n{}, {} \n{}\n({}\", {}\")".format(timeString, StreetResult, CityResult, StateResult, CountryResult, lat, lng)
@@ -190,12 +193,3 @@ while True:
 
     if r.status_code != 200:
         print("Error posting message:", r.text)
-
-                
-
-
-
-
-
-
-
