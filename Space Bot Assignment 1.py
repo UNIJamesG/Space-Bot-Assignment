@@ -40,10 +40,10 @@ if choice.lower() == "n":
     user_token = input("Please enter your Webex access token: ")
     accessToken = f"Bearer {user_token}"
 else:
-    accessToken = "Bearer<!!!REPLACEME with hard-coded token!!!>"
+    accessToken = "Bearer Y2MxMzU5MTAtYmVlMS00MmIyLWE0ZTItNDE1ZTExYTlmOGY4Njg4ZTgwM2MtOWIw_PE93_d68b3fe9-4c07-4dad-8882-3b3fd6afb92d"
 
 # 3. Provide the URL to the Webex room API.
-                )
+                
 r = requests.get(
     "https://webexapis.com/v1/rooms",
     headers={"Authorization": accessToken}
@@ -98,102 +98,98 @@ while True:
                             "roomId": roomIdToGetMessages,
                             "max": 1
                     }
-# 5. Provide the URL to the Webex messages API.    
+    # 5. Provide the URL to the Webex messages API.    
     r = requests.get(
     "https://webexapis.com/v1/messages",
     params=GetParameters,
     headers={"Authorization": accessToken}
-)
-if not r.status_code == 200:
-    raise Exception(f"Incorrect reply: {r.status_code} {r.text}")
+    )
+    if not r.status_code == 200:
+        raise Exception(f"Incorrect reply: {r.status_code} {r.text}")
     
     #for the sake of testing, the max number of seconds is set to 5.
-        if seconds > 5:
+    if seconds > 5:
             seconds = 5    
             
-        time.sleep(seconds)
+    time.sleep(seconds)
+         
     
-    #for the sake of testing, the max number of seconds is set to 5.
-        if seconds > 5:
-            seconds = 5    
-            
-        time.sleep(seconds)     
-    
-# 6. Provide the URL to the ISS Current Location API.         
-         r = requests.get("http://api.open-notify.org/iss-now.json")
-if r.status_code != 200: 
-raise Exception("Error fetching ISS data.")
-json_data = r.json()
-# 7. Record the ISS GPS coordinates and timestamp.
+    # 6. Provide the URL to the ISS Current Location API.         
+    r = requests.get("http://api.open-notify.org/iss-now.json")
+    if r.status_code != 200: 
+     raise Exception("Error fetching ISS data.")     
+    json_data = r.json()
+    # 7. Record the ISS GPS coordinates and timestamp.
 
-        lat = json_data["iss_position"]["latitude"]
-        lng = json_data["iss_position"]["longitude"]
-        timestamp = json_data["timestamp"]
+    lat = json_data["iss_position"]["latitude"]
+    lng = json_data["iss_position"]["longitude"]
+    timestamp = json_data["timestamp"]
         
-# 8. Convert the timestamp epoch value to a human readable date and time.
-        # Use the time.ctime function to convert the timestamp to a human readable date and time.
-        timeString = time.ctime(timestamp)      
+    # 8. Convert the timestamp epoch value to a human readable date and time.
+         # Use the time.ctime function to convert the timestamp to a human readable date and time.
+    timeString = time.ctime(timestamp)      
    
-# 9. Provide your Geoloaction API consumer key.
+    # 9. Provide your Geoloaction API consumer key.
     
-        mapsAPIGetParameters = { 
-                                "appid":"Your Key"
+    mapsAPIGetParameters = { 
+                            "appid":"23b3179ed699a6446e1c10664a3ef5da"
                                }
     
-# 10. Provide the URL to the Reverse GeoCode API.
-    # Get location information using the API reverse geocode service using the HTTP GET method
-       r = requests.get("https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={My Api}", 
+    # 10. Provide the URL to the Reverse GeoCode API.
+        # Get location information using the API reverse geocode service using the HTTP GET method
+    r = requests.get("https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={My Api}", 
                              params = mapsAPIGetParameters
                         )
 
-    # Verify if the returned JSON data from the API service are OK
-        json_data = r.json()
+        # Verify if the returned JSON data from the API service are OK
+    json_data = r.json()
 
-        if r.status_code != 200:
-            continue
+    if r.status_code != 200:
+        print("Invalid Message")
 
 
-# 11. Store the location received from the API in a required variables
-       CountryResult = json_data["address"].get("country_code", "XZ").upper()
-        StateResult = json_data["address"].get("state", "")
-        CityResult = json_data["address"].get("city", json_data["address"].get("town", json_data["address"].get("village", "")))
-        StreetResult = json_data["address"].get("road", "")
 
-        #Find the country name using ISO3166 country code
-        if not CountryResult == "XZ":
+    # 11. Store the location received from the API in a required variables
+    CountryResult = json_data["address"].get("country_code", "XZ").upper()
+    StateResult = json_data["address"].get("state", "")
+    CityResult = json_data["address"].get("city", json_data["address"].get("town", json_data["address"].get("village", "")))
+    StreetResult = json_data["address"].get("road", "")
+
+            #Find the country name using ISO3166 country code
+    if not CountryResult == "XZ":
             try:
                 CountryResult = countries.get(CountryResult).name
             except:
                 CountryResult = "Not Found Country"
-# 12. Complete the code to format the response message.
-#     Example responseMessage result: In Austin, Texas the ISS will fly over on Thu Jun 18 18:42:36 2020 for 242 seconds.
+    # 12. Complete the code to format the response message.
+    #     Example responseMessage result: In Austin, Texas the ISS will fly over on Thu Jun 18 18:42:36 2020 for 242 seconds.
         #responseMessage = "On {}, the ISS was flying over the following location: \n{} \n{}, {} \n{}\n({}\", {}\")".format(timeString, StreetResult, CityResult, StateResult, CountryResult, lat, lng)
 
-       if CountryResult == "XZ":
-    responseMessage = f"On {timeString}, the ISS was flying over a body of water at latitude {lat}° and longitude {lng}°."
-else:
-    responseMessage = f"On {timeString}, the ISS was flying over {CityResult}, {StateResult}, {CountryResult}. ({lat}°, {lng}°)"
-print("Sending to Webex:", responseMessage)
-)
+    if CountryResult == "XZ":
+     responseMessage = f"On {timeString}, the ISS was flying over a body of water at latitude {lat}° and longitude {lng}°."
+    else:
+     responseMessage = f"On {timeString}, the ISS was flying over {CityResult}, {StateResult}, {CountryResult}. ({lat}°, {lng}°)"
+    print("Sending to Webex:", responseMessage)
 
-# 13. Complete the code to post the message to the Webex room.         
-        # the Webex HTTP headers, including the Authoriztion and Content-Type
-        HTTPHeaders = {
-    "Authorization": accessToken,
-    "Content-Type": "application/json"
-}
 
-PostData = {
-    "roomId": roomIdToGetMessages,
-    "text": responseMessage
-}
+    # 13. Complete the code to post the message to the Webex room.         
+         # the Webex HTTP headers, including the Authoriztion and Content-Type
+    HTTPHeaders = {
+        "Authorization": accessToken,
+        "Content-Type": "application/json"
+    }
 
-r = requests.post("https://webexapis.com/v1/messages",
+    PostData = {
+        "roomId": roomIdToGetMessages,
+     "text": responseMessage
+    }
+
+    r = requests.post("https://webexapis.com/v1/messages",
                   data=json.dumps(PostData),
                   headers=HTTPHeaders)
 
-if r.status_code != 200:
-    print("Error posting message:", r.text)
+    if r.status_code != 200:
+        print("Error posting message:", r.text)
 
                 
 
